@@ -1,20 +1,26 @@
 package com.mustafa.test.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class NewTableController {
 	
 	@Autowired
 	INewTableRepo repo;
 	
 	@RequestMapping(path = "/")
+	public String newrecord(Map<String, Object> model) {
+		return "newrecord";
+	}
+	
+	@RequestMapping(path = "/getall")
 	public List<NewTable> getall() {
 		return repo.findAll();
 	}
