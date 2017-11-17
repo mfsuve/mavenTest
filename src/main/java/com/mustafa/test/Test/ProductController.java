@@ -10,35 +10,54 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class NewTableController {
+public class ProductController {
 	
 	@Autowired
-	INewTableRepo repo;
+	IProductRepo repo;
 	
-	@RequestMapping(path = "/")
-	public String newrecord(Map<String, Object> model) {
-		return "newrecord";
+	@RequestMapping(path = "/", method = RequestMethod.GET)
+	public String productlist(Map<String, Object> model) {
+		model.put("products", getall());
+		return "productlist";
 	}
 	
+	@RequestMapping(path = "/product")
+	public String product(String s) {
+		return "product";
+	}
+	
+	@RequestMapping(path = "/save/{name}/{desc}")
+	public void saveProduct(@PathVariable String name, @PathVariable String desc) {
+		Product p = new Product();
+		p.setName(name);
+		p.setDesc(desc);
+		repo.save(p);
+	}
+
+	public List<Product> getall() {
+		return repo.findAllByOrderByIdAsc();
+	}
+	
+/*
 	@RequestMapping(path = "/getall")
-	public List<NewTable> getall() {
+	public List<Product> getall() {
 		return repo.findAll();
 	}
 	
 	@RequestMapping(path = "/getid/{id}")
-	public NewTable getById(@PathVariable Long id) {
+	public Product getById(@PathVariable Long id) {
 		return repo.findOne(id);
 	}
 	
 	@RequestMapping(path = "/getname/{name}")
-	public List<NewTable> getByName(@PathVariable String name) {
+	public List<Product> getByName(@PathVariable String name) {
 		return repo.findByName(name);
 	}
 	
 	@RequestMapping(path = "/save/{id}/{name}", method = RequestMethod.POST)
 	public String save(@PathVariable Long id, @PathVariable String name) {
 		try {
-			NewTable entry = new NewTable();
+			Product entry = new Product();
 			entry.setId(id);
 			entry.setName(name);
 			repo.save(entry);
@@ -48,5 +67,5 @@ public class NewTableController {
 			return "Save Failed";
 		}
 	}
-	
+*/
 }
